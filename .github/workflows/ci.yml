@@ -17,6 +17,10 @@ jobs:
           test -f docs/ETHICAL_RESEARCH_MOD_PLAN.md
           test -f docs/PRIVACY.md
           test -f docs/CONSENT.md
+          test -f docs/SECURITY.md
+          test -f docs/api/API_SPEC.md
+          test -f docs/specs/FEATURE_FLAGS_SPEC.md
+          test -f docs/specs/CONSENT_UI_SPEC.md
       - name: Markdown lint (remark)
         uses: avto-dev/markdown-lint@v1
         with:
