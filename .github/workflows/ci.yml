@@ -21,6 +21,7 @@ jobs:
           test -f docs/api/API_SPEC.md
           test -f docs/specs/FEATURE_FLAGS_SPEC.md
           test -f docs/specs/CONSENT_UI_SPEC.md
+          test -f docs/specs/MONITORING_SPEC.md
       - name: Markdown lint (remark)
         uses: avto-dev/markdown-lint@v1
         with:
