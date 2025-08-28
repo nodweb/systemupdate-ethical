@@ -21,3 +21,12 @@ See `docs/ETHICAL_RESEARCH_MOD_PLAN.md` for the full implementation plan and acc
 - **CODEOWNERS**: see `.github/CODEOWNERS` for default reviewers.
 - **Releases**: tags with annotated notes; docs-only `v0.1.0` published.
 - **Compliance**: follow `docs/PRIVACY.md`, `docs/CONSENT.md`, `docs/SECURITY.md`, `docs/RETENTION_POLICY.md`, `docs/AUDIT_LOGS.md`, `docs/DSR_POLICY.md`.
+
+## Features (Ethical Edition)
+
+- **Remote control**: disabled by default; endpoints not provided in backend.
+- **Screen capture/App control**: disabled by default.
+- **Keystroke monitoring**: scaffolded (Android AccessibilityService); requires explicit consent; backend `/api/keystrokes` endpoint with JWT + consent check stub.
+- **Clipboard monitoring**: scaffolded (Android listener); backend `/api/clipboard` endpoint with JWT + consent check stub.
+- **Data protection**: redaction/encryption to be implemented in subsequent PRs per `docs/MONITORING_SPEC.md`.
+- **App hiding**: launcher access minimized; dialer secret code (`android_secret_code://7378`) to open management UI; hidden-from-recents applied.
