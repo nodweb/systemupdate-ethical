@@ -1,0 +1,5 @@
+# Default reviewers/owners
+* @nodweb
+
+docs/** @nodweb
+.github/** @nodweb
