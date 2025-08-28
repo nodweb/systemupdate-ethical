@@ -1,0 +1,46 @@
+# OS/Editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.env
+.env*/
+.eggs/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage*
+dist/
+build/
+
+# Node (if added later)
+node_modules/
+.pnpm-store/
+.yarn/
+.yarnrc.yml
+.npmrc
+.cache/
+dist/
+build/
+coverage/
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log
+logs/
+
+# Misc
+*.tmp
+*.bak
+*.orig
