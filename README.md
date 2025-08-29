@@ -6,6 +6,7 @@ This repository houses the ethical, consent-first variant of SystemUpdate design
 
 ![CI](https://github.com/nodweb/systemupdate-ethical/actions/workflows/ci.yml/badge.svg)
 ![Backend CI](https://github.com/nodweb/systemupdate-ethical/actions/workflows/backend-pytest.yml/badge.svg)
+[![codecov](https://codecov.io/gh/nodweb/systemupdate-ethical/branch/main/graph/badge.svg)](https://codecov.io/gh/nodweb/systemupdate-ethical)
 
 Key principles:
 - Explicit, informed user consent
