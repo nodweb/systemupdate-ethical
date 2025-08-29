@@ -1,0 +1,41 @@
+name: Backend Pytest
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-pytest.yml'
+  pull_request:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-pytest.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run tests
+        env:
+          JWT_SECRET_KEY: test-secret
+          SMTP_HOST: localhost
+          SMTP_PORT: 1025
+          EMAIL_FROM: test@example.com
+          EMAIL_REPORT_TO: audit@example.com
+        run: pytest -q
