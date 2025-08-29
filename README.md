@@ -5,6 +5,7 @@ Status: Planning and scaffolding phase.
 This repository houses the ethical, consent-first variant of SystemUpdate designed for educational and controlled research environments.
 
 ![CI](https://github.com/nodweb/systemupdate-ethical/actions/workflows/ci.yml/badge.svg)
+![Backend CI](https://github.com/nodweb/systemupdate-ethical/actions/workflows/backend-pytest.yml/badge.svg)
 
 Key principles:
 - Explicit, informed user consent
