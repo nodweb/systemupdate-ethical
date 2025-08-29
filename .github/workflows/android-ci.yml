@@ -1,0 +1,40 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ main, feature/** ]
+    paths:
+      - 'android/**'
+      - '.github/workflows/android-ci.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'android/**'
+      - '.github/workflows/android-ci.yml'
+
+jobs:
+  gradle_checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Detect Gradle project
+        id: detect
+        run: |
+          if ls android/**/build.gradle* 1> /dev/null 2>&1; then echo "has_gradle=true" >> $GITHUB_OUTPUT; else echo "has_gradle=false" >> $GITHUB_OUTPUT; fi
+      - name: Set up JDK
+        if: steps.detect.outputs.has_gradle == 'true'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Gradle Wrapper Validate
+        if: steps.detect.outputs.has_gradle == 'true'
+        uses: gradle/actions/wrapper-validation@v3
+      - name: Gradle Build
+        if: steps.detect.outputs.has_gradle == 'true'
+        uses: gradle/gradle-build-action@v3
+        with:
+          arguments: assemble
+      - name: Skip (no Android Gradle project yet)
+        if: steps.detect.outputs.has_gradle != 'true'
+        run: echo "No Android Gradle project detected; skipping build."
