@@ -25,17 +25,36 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install deps
+      - name: Install deps (runtime + dev)
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest
+          pip install -r requirements-dev.txt
 
-      - name: Run tests
+      - name: Code quality - Black (check)
+        run: black --check .
+
+      - name: Code quality - isort (check)
+        run: isort --check-only .
+
+      - name: Code quality - Flake8
+        run: flake8 .
+
+      - name: Type check - MyPy
+        run: mypy .
+
+      - name: Run tests with coverage (fail under 80%)
         env:
           JWT_SECRET_KEY: test-secret
           SMTP_HOST: localhost
           SMTP_PORT: 1025
           EMAIL_FROM: test@example.com
           EMAIL_REPORT_TO: audit@example.com
-        run: pytest -q
+        run: pytest -q --cov=app --cov-report=xml --cov-report=term --cov-fail-under=80
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-coverage-xml
+          path: backend/coverage.xml
