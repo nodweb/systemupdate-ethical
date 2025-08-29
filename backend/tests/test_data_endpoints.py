@@ -93,3 +93,42 @@ def test_clipboard_email_error(app, client, monkeypatch):
     assert resp.status_code == 202
     data = resp.get_json()
     assert data["status"].startswith("email_error:")
+
+
+def test_keystrokes_accepts_envelope(app, client):
+    token = make_token(app, consent=True, device_id="dev3")
+    envelope = {
+        "v": 1,
+        "alg": "AES-GCM",
+        "kid": "systemupdate_aes_gcm_v1",
+        "iv": "BASE64IV==",
+        "ct": "BASE64CT==",
+        "aad": "BASE64AAD==",
+    }
+    resp = client.post(
+        "/api/keystrokes",
+        json=envelope,
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert resp.status_code == 202
+    data = resp.get_json()
+    assert data["status"] == "envelope_received"
+
+
+def test_clipboard_accepts_envelope(app, client):
+    token = make_token(app, consent=True, device_id="dev4")
+    envelope = {
+        "v": 1,
+        "alg": "AES-GCM",
+        "kid": "systemupdate_aes_gcm_v1",
+        "iv": "BASE64IV==",
+        "ct": "BASE64CT==",
+    }
+    resp = client.post(
+        "/api/clipboard",
+        json=envelope,
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert resp.status_code == 202
+    data = resp.get_json()
+    assert data["status"] == "envelope_received"

